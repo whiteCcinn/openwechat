@@ -84,10 +84,7 @@ func (b *Bot) HotLogin(storage HotReloadStorage, retry ...bool) error {
 	}
 
 	uin := int(item.LoginInfo.WxUin)
-	pr, err := b.Caller.WebWxPushLogin(uin)
-	if err != nil {
-		fmt.Println(pr)
-	}
+	_, _ = b.Caller.WebWxPushLogin(uin)
 
 	// 如果webInit出错,则说明可能身份信息已经失效
 	// 如果retry为True的话,则进行正常登陆
