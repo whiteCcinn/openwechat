@@ -36,7 +36,6 @@ func TestHotLogin(t *testing.T) {
 	//}
 	bot.UUIDCallback = PrintlnQrcodeUrl
 
-
 	Storage := NewJsonFileHotReloadStorage("Storage.json")
 
 	// 登陆
