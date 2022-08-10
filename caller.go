@@ -158,9 +158,6 @@ func (c *Caller) WebWxGetContact(info *LoginInfo) (Members, error) {
 	}
 	defer resp.Body.Close()
 	var item WebWxContactResponse
-	bbb := make([]byte, 1024 * 10)
-	resp.Body.Read(bbb)
-	println(string(bbb))
 	if err := scanJson(resp, &item); err != nil {
 		return nil, err
 	}
