@@ -1,10 +1,11 @@
 package openwechat
 
 import (
-	"github.com/mdp/qrterminal/v3"
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
+	"github.com/mdp/qrterminal/v3"
 	"log"
 	"net/url"
 	"os"
@@ -128,6 +129,7 @@ func (b *Bot) LoginWithUUID(uuid string) error {
 	for {
 		// 长轮询检查是否扫码登录
 		resp, err := b.Caller.CheckLogin(uuid)
+		fmt.Println("状态码: ", resp.Code)
 		if err != nil {
 			return err
 		}
