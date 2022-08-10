@@ -76,7 +76,14 @@ type UserDetailItem struct {
 	EncryChatRoomId string
 }
 
+type UserDetailNoEncryItem struct {
+	UserName   string
+	ChatRoomId string
+}
+
 type UserDetailItemList []UserDetailItem
+
+type UserDetailNoEncryItemList []UserDetailNoEncryItem
 
 func NewUserDetailItemList(members Members) UserDetailItemList {
 	var list = make(UserDetailItemList, len(members))
@@ -86,6 +93,19 @@ func NewUserDetailItemList(members Members) UserDetailItemList {
 	}
 	return list
 }
+
+func NewUserDetailNoEncryItemList(members Members) UserDetailNoEncryItemList {
+	var list = make(UserDetailNoEncryItemList, len(members))
+	for index, member := range members {
+		item := UserDetailNoEncryItem{
+			UserName:   member.UserName,
+			ChatRoomId: "",
+		}
+		list[index] = item
+	}
+	return list
+}
+
 
 type SyncCheckResponse struct {
 	RetCode  string

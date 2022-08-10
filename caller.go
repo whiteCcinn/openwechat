@@ -188,6 +188,22 @@ func (c *Caller) WebWxBatchGetContact(members Members, request *BaseRequest) (Me
 	return item.ContactList, nil
 }
 
+func (c *Caller) WebWxBatchGetContactGroup(members Members, request *BaseRequest) (Members, error) {
+	resp, err := c.Client.WebWxBatchGetAllContact(members, request)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	var item WebWxBatchContactResponse
+	if err := scanJson(resp, &item); err != nil {
+		return nil, err
+	}
+	if !item.BaseResponse.Ok() {
+		return nil, item.BaseResponse
+	}
+	return item.ContactList, nil
+}
+
 // WebWxSync 获取新的消息接口
 func (c *Caller) WebWxSync(request *BaseRequest, response *WebInitResponse, info *LoginInfo) (*WebWxSyncResponse, error) {
 	resp, err := c.Client.WebWxSync(request, response, info)

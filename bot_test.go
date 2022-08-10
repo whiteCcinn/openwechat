@@ -52,17 +52,21 @@ func TestHotLogin(t *testing.T) {
 		return
 	}
 
+
+
 	// 获取所有的好友
 	friends, err := self.Friends()
 	fmt.Println(friends, err)
+
+	self.Detail()
 
 	// 获取所有的群组
 	groups, err := self.Groups(true)
 	fmt.Println(groups, err)
 
-	info := bot.Storage.LoginInfo
-	members, err := bot.Caller.WebWxGetContact(info)
-	fmt.Println(members)
+	//info := bot.Storage.LoginInfo
+	//members, err := bot.Caller.WebWxBatchGetContactGroup(info)
+	//fmt.Println(members)
 
 	// 阻塞主goroutine, 直到发生异常或者用户主动退出
 	bot.Block()

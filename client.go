@@ -221,7 +221,25 @@ func (c *Client) WebWxBatchGetContact(members Members, request *BaseRequest) (*h
 	params.Add("type", "ex")
 	params.Add("r", strconv.FormatInt(time.Now().UnixNano()/1e6, 10))
 	path.RawQuery = params.Encode()
-	list := NewUserDetailItemList(members)
+	list := NewUserDetailNoEncryItemList(members)
+	content := map[string]interface{}{
+		"BaseRequest": request,
+		"Count":       members.Count(),
+		"List":        list,
+	}
+	body, _ := ToBuffer(content)
+	req, _ := http.NewRequest(http.MethodPost, path.String(), body)
+	req.Header.Add("Content-Type", jsonContentType)
+	return c.Do(req)
+}
+
+func (c *Client) WebWxBatchGetAllContact(members Members, request *BaseRequest) (*http.Response, error) {
+	path, _ := url.Parse(c.Domain.BaseHost() + webwxbatchgetcontact)
+	params := url.Values{}
+	params.Add("type", "ex")
+	params.Add("r", strconv.FormatInt(time.Now().UnixNano()/1e6, 10))
+	path.RawQuery = params.Encode()
+	list := NewUserDetailNoEncryItemList(members)
 	content := map[string]interface{}{
 		"BaseRequest": request,
 		"Count":       members.Count(),
