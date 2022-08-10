@@ -6,6 +6,68 @@ import (
 	"time"
 )
 
+func TestHotLogin(t *testing.T) {
+	bot := DefaultBot(DesktopInTerminal)
+
+	dispatcher := NewMessageMatchDispatcher()
+	dispatcher.SetAsync(true)
+
+	// 只处理消息类型为文本类型的消息
+	dispatcher.OnText(func(msg *MessageContext) {
+		fmt.Println(msg.Message.FromUserName, msg.Message.ToUserName, msg.Message.Content)
+		fmt.Println(msg.Message.RowContent)
+		fmt.Println(msg.Message.OriContent)
+
+		fmt.Println(msg.Message.IsComeFromGroup())
+		fmt.Println(msg.Message.IsJoinGroup())
+		fmt.Println(msg.Message.IsPaiYiPai())
+		//msg.ReplyText("hello")
+	})
+
+
+	// 注册消息处理函数
+	bot.MessageHandler = DispatchMessage(dispatcher)
+
+	// 注册登陆二维码回调
+	//UUIDCallback := func(model Mode, uuid string) {
+	//	if !bot.IsHot() {
+	//		PrintlnQrcodeUrl(model, uuid)
+	//	}
+	//}
+	bot.UUIDCallback = PrintlnQrcodeUrl
+
+
+	Storage := NewJsonFileHotReloadStorage("Storage.json")
+
+	// 登陆
+	if err := bot.HotLogin(Storage, true); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// 获取登陆的用户
+	self, err := bot.GetCurrentUser()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// 获取所有的好友
+	friends, err := self.Friends()
+	fmt.Println(friends, err)
+
+	// 获取所有的群组
+	groups, err := self.Groups(true)
+	fmt.Println(groups, err)
+
+	info := bot.Storage.LoginInfo
+	members, err := bot.Caller.WebWxGetContact(info)
+	fmt.Println(members)
+
+	// 阻塞主goroutine, 直到发生异常或者用户主动退出
+	bot.Block()
+}
+
 func TestLogin(t *testing.T) {
 	bot := DefaultBot(Desktop)
 	bot.LoginCallBack = func(body []byte) {

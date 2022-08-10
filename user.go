@@ -95,9 +95,9 @@ func (u *User) SaveAvatarWithWriter(writer io.Writer) error {
 
 // Detail 获取用户的详情
 func (u *User) Detail() error {
-	if u.UserName == u.Self.UserName {
-		return nil
-	}
+	//if u.UserName == u.Self.UserName {
+	//	return nil
+	//}
 	members := Members{u}
 	request := u.Self.Bot.Storage.Request
 	newMembers, err := u.Self.Bot.Caller.WebWxBatchGetContact(members, request)
